@@ -217,6 +217,7 @@ class AWSProvisionStageTwoResourcesTest(AWSProvisionStageTestBase):
         self.assertEqual(len(self.resources["aws_acm_certificate"]), 2)
         self.assertEqual(len(self.resources["aws_route53_zone"]), 1)
 
+
 class AWSProvisionStageTwoServicesTest(AWSProvisionStageTestBase):
     fixture_name = "backend-2-service-1-db"
 
@@ -307,6 +308,7 @@ class AWSProvisionStageExistingVpcSubnetsProvided(AWSProvisionStageTestBase):
         self.assertEqual(len(self.resources["aws_subnet"]), 2)
         self.assertEqual(self.resources.get("aws_route_table"), None)
 
+
 class AWSProvisionStageOneServiceTestServerless(AWSProvisionStageTestBase):
     fixture_name = "serverless-1-service"
     env_data_filepath = "environments_serverless_1_service.yml"
@@ -315,7 +317,10 @@ class AWSProvisionStageOneServiceTestServerless(AWSProvisionStageTestBase):
         self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
         self.assertEqual(len(self.resources["aws_vpc"]), 1)
 
-class AWSProvisionStageOneServiceServerlessAndOneResourceDynamoDBTest(AWSProvisionStageTestBase):
+
+class AWSProvisionStageOneServiceServerlessAndOneResourceDynamoDBTest(
+    AWSProvisionStageTestBase
+):
     fixture_name = "serverless-1-service-1-dynamodb"
     env_data_filepath = "environments_serverless_1_service_1_dynamodb.yml"
 
@@ -324,7 +329,10 @@ class AWSProvisionStageOneServiceServerlessAndOneResourceDynamoDBTest(AWSProvisi
         self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
         self.assertEqual(len(self.resources["aws_vpc"]), 1)
 
-class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisionStageTestBase):
+
+class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTest(
+    AWSProvisionStageTestBase
+):
     fixture_name = "serverless-1-service-2-dynamodb"
     env_data_filepath = "environments_serverless_1_service_2_dynamodb.yml"
 
@@ -333,7 +341,10 @@ class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisi
         self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
         self.assertEqual(len(self.resources["aws_vpc"]), 1)
 
-class AWSProvisionStageTwoServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisionStageTestBase):
+
+class AWSProvisionStageTwoServiceServerlessAndTwoResourceDynamoDBTest(
+    AWSProvisionStageTestBase
+):
     fixture_name = "serverless-2-service-2-dynamodb"
     env_data_filepath = "environments_serverless_2_service_2_dynamodb.yml"
 

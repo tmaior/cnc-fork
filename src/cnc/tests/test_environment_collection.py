@@ -52,6 +52,7 @@ class EnvironmentCollectionTwoServicesandDBsTwoEnvsTest(
         self.assertEqual(len(self.collection.all_services_for_type("frontend")), 0)
         self.assertEqual(len(self.collection.all_services_for_type("cache")), 0)
 
+
 class EnvironmentCollectionRegionSettings(EnvironmentCollectionBaseTestCase):
     fixture_name = "backend-1-service-2-db-2-envs"
     env_data_filepath = "environments_gcp_run_region_settings.yml"
