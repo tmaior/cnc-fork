@@ -53,5 +53,6 @@ class EnvironmentCollectionTwoServicesandDynamoDBTwoEnvsTest(EnvironmentBaseTest
     fixture_name = "serverless-1-service-2-dynamodb-2-envs"
 
     def test_environment_services(self):
-        self.assertEqual(len(self.environment.services), 3)
-        self.assertEqual(len(self.environment.web_services), 1)
+        self.assertEqual(len(self.collection.all_services), 6)
+        self.assertEqual(len(self.collection.all_services_for_type("serverless")), 2)
+        self.assertEqual(len(self.collection.all_services_for_type("dynamodb")), 4)
