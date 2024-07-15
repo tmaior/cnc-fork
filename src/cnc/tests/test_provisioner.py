@@ -217,21 +217,29 @@ class AWSProvisionStageTwoResourcesTest(AWSProvisionStageTestBase):
         self.assertEqual(len(self.resources["aws_acm_certificate"]), 2)
         self.assertEqual(len(self.resources["aws_route53_zone"]), 1)
 
-class AWSProvisionStageTwoServicesServerlessTest(AWSProvisionStageTestBase):
-    fixture_name = "serverless-2-service-1-dynamodb"
-
-    def test_tf_is_valid(self):
-        self.assertEqual(len(self.resources["aws_dynamodb_table"]), 1)
-        self.assertEqual(len(self.resources["aws_lambda_function"]), 2)
-        self.assertEqual(len(self.resources["aws_vpc"]), 1)
-
-class AWSProvisionStageTwoServicesServerlessAndDynamoDbsTest(AWSProvisionStageTestBase):
-    fixture_name = "serverless-2-service-2-dynamodb"
+class AWSProvisionStageTwoResourcesTestDynamoDB(AWSProvisionStageTestBase):
+    fixture_name = "serverless-1-service-2-dynamodb"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 2)
+        self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
+        self.assertEqual(len(self.resources["aws_vpc"]), 1)
+
+class AWSProvisionStageTwoServicesandDynamoDBTwoEnvsTest(AWSProvisionStageTestBase):
+    fixture_name = "serverless-1-service-2-dynamodb-2-envs"
+
+    def test_tf_is_valid(self):
+        self.assertEqual(len(self.resources["aws_dynamodb_table"]), 4)
         self.assertEqual(len(self.resources["aws_lambda_function"]), 2)
         self.assertEqual(len(self.resources["aws_vpc"]), 1)
+
+# class AWSProvisionStageTwoServicesServerlessAndDynamoDbsTest(AWSProvisionStageTestBase):
+#     fixture_name = "serverless-2-service-2-dynamodb"
+
+#     def test_tf_is_valid(self):
+#         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 2)
+#         self.assertEqual(len(self.resources["aws_lambda_function"]), 2)
+#         self.assertEqual(len(self.resources["aws_vpc"]), 1)
 
 class AWSProvisionStageTwoServicesTest(AWSProvisionStageTestBase):
     fixture_name = "backend-2-service-1-db"
