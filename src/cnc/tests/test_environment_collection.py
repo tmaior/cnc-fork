@@ -56,6 +56,7 @@ class EnvironmentCollectionTwoServicesandDynamoDBTwoEnvsTest(
     EnvironmentCollectionBaseTestCase
 ):
     fixture_name = "serverless-1-service-2-dynamodb-2-envs"
+    env_data_filepath = "environments_serverless_1_service_2_dynamodb_2_envs.yml"
 
     def test_environment_order(self):
         self.assertEqual(len(self.collection.environments), 2)
