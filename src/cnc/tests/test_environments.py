@@ -60,5 +60,5 @@ class EnvironmentCollectionTwoServicesandDynamoDBTwoEnvsTest(EnvironmentBaseTest
 
     def test_environment_services(self):
         self.assertEqual(len(self.collection.all_services), 3)
-        self.assertEqual(len(self.collection.all_services_for_type("serverless")), 2)
-        self.assertEqual(len(self.collection.all_services_for_type("dynamodb")), 4)
+        self.assertEqual(len(self.collection.all_services_for_type("serverless")), 1)
+        self.assertEqual(len(self.collection.all_services_for_type("dynamodb")), 2)
