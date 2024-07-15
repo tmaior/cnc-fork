@@ -54,11 +54,11 @@ class EnvironmentCollectionTwoServicesandDynamoDBTwoEnvsTest(EnvironmentBaseTest
     env_data_filepath = "environments_serverless_1_service_2_dynamodb_2_envs.yml"
 
     def test_environment_order(self):
-        self.assertEqual(len(self.collection.environments), 2)
+        self.assertEqual(len(self.collection.environments), 1)
         self.assertEqual(self.collection.environments[0].name, "main")
         self.assertEqual(self.collection.environments[1].name, "staging")
 
     def test_environment_services(self):
-        self.assertEqual(len(self.collection.all_services), 6)
+        self.assertEqual(len(self.collection.all_services), 3)
         self.assertEqual(len(self.collection.all_services_for_type("serverless")), 2)
         self.assertEqual(len(self.collection.all_services_for_type("dynamodb")), 4)

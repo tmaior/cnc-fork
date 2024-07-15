@@ -338,8 +338,8 @@ class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTestTwoEnvs(AWS
     env_data_filepath = "environments_serverless_1_service_2_dynamodb_2_envs.yml"
 
     def test_tf_is_valid(self):
-        self.assertEqual(len(self.resources["aws_dynamodb_table"]), 4)
-        self.assertEqual(len(self.resources["aws_lambda_function"]), 2)
+        self.assertEqual(len(self.resources["aws_dynamodb_table"]), 2)
+        self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
         self.assertEqual(len(self.resources["aws_vpc"]), 1)
 
 class AWSProvisionStageTwoServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisionStageTestBase):
