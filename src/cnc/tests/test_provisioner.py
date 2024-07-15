@@ -309,6 +309,7 @@ class AWSProvisionStageExistingVpcSubnetsProvided(AWSProvisionStageTestBase):
 
 class AWSProvisionStageOneServiceTestServerless(AWSProvisionStageTestBase):
     fixture_name = "serverless-1-service"
+    env_data_filepath = "environments_serverless_1_service.yml"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_lambda_function"]), 1)
@@ -316,6 +317,7 @@ class AWSProvisionStageOneServiceTestServerless(AWSProvisionStageTestBase):
 
 class AWSProvisionStageOneServiceServerlessAndOneResourceDynamoDBTest(AWSProvisionStageTestBase):
     fixture_name = "serverless-1-service-1-dynamodb"
+    env_data_filepath = "environments_serverless_1_service_1_dynamodb.yml"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 1)
@@ -324,6 +326,7 @@ class AWSProvisionStageOneServiceServerlessAndOneResourceDynamoDBTest(AWSProvisi
 
 class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisionStageTestBase):
     fixture_name = "serverless-1-service-2-dynamodb"
+    env_data_filepath = "environments_serverless_1_service_2_dynamodb.yml"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 2)
@@ -332,6 +335,7 @@ class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisi
 
 class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTestTwoEnvs(AWSProvisionStageTestBase):
     fixture_name = "serverless-1-service-2-dynamodb-2-envs"
+    env_data_filepath = "environments_serverless_1_service_2_dynamodb_2_envs.yml"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 4)
@@ -340,6 +344,7 @@ class AWSProvisionStageOneServiceServerlessAndTwoResourceDynamoDBTestTwoEnvs(AWS
 
 class AWSProvisionStageTwoServiceServerlessAndTwoResourceDynamoDBTest(AWSProvisionStageTestBase):
     fixture_name = "serverless-2-service-2-dynamodb"
+    env_data_filepath = "environments_serverless_2_service_2_dynamodb.yml"
 
     def test_tf_is_valid(self):
         self.assertEqual(len(self.resources["aws_dynamodb_table"]), 2)
