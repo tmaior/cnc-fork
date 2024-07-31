@@ -1,12 +1,3 @@
-#!/bin/bash
-
-# Echo caller identity
-echo -e "\nYour currently authenticated accounts:\n$(gcloud auth list)"
-echo -e "\nCurrent configuration:\n$(gcloud config list)"
-
-# Ensure docker configured
-gcloud auth configure-docker {{ environment.collection.region }}-docker.pkg.dev
-
 {{ render_template("Dockerfile.j2", "Dockerfile") }}
 # copy config from default location
 if ! test -d "{{ toolbox.rendered_files_path }}"/.config
@@ -40,6 +31,11 @@ docker pull {{ service.image_for_tag(toolbox.tag_for_service(service.name)) }}
 docker build -t {{ service.instance_name }}_toolbox \
 -f {{ toolbox.rendered_files_path }}/Dockerfile {{ toolbox.rendered_files_path }}
 
+{%- if command %}
+{# Allow time for port forwarding processes to start #}
+sleep ${CNC_TOOLBOX_CMD_DELAY_SECONDS:-15}
+{%- endif %}
+
 docker_auth_var="AUTH_AUTO_DETECTED=false"
 if test -v TOOLBOX_GOOGLE_APPLICATION_CREDENTIALS
 then
@@ -60,9 +56,9 @@ docker run --entrypoint sh \
 {%- endfor -%}
 --network ${CNC_TOOLBOX_NETWORK:-host} \
 {%- if command %}
---rm --name app {{ service.instance_name }}_toolbox -c '{{ command }}'; command_result=$?
+--rm {{ service.instance_name }}_toolbox -c '{{ command }}'; command_result=$?
 {%- else %}
--it --rm --name app {{ service.instance_name }}_toolbox
+-it --rm {{ service.instance_name }}_toolbox
 {%- endif %}
 
 {%- if command %}

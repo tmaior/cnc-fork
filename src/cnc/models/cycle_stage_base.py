@@ -4,6 +4,8 @@ import subprocess
 import shutil
 from pathlib import Path
 from functools import partial, cached_property
+import shlex
+from datetime import datetime
 
 from jinja2 import (
     Environment,
@@ -37,6 +39,10 @@ class _TemplatedBase:
     @property
     def custom_template_dir(self):
         return f"{self.config_files_path}/custom"
+
+    @property
+    def current_timestamp(self):
+        return datetime.now().isoformat()
 
     def setup(self):
         if not os.path.isdir(self.config_files_path):
@@ -129,6 +135,7 @@ class _TemplatedBase:
             autoescape=select_autoescape(),
             undefined=StrictUndefined,
         )
+        env.globals["shlex"] = shlex
 
         try:
             return env.get_template(name)
@@ -267,6 +274,25 @@ class EnvironmentTemplatedBase(_TemplatedBase):
 
         for item in self.environment.environment_items:
             _all.update({item.name: item.value})
+
+        for service_name, tag in self.service_tags.items():
+            _all.update({f"CNC_SERVICE_TAG_{service_name.upper()}": tag})
+
+        return _all
+
+    def service_environment_items(self, service):
+        _all = {}
+
+        for item in service.environment_items:
+            _all.update({item.name: item.value})
+
+        _all.update(
+            {
+                f"CNC_SERVICE_TAG_{service.name.upper()}": (
+                    self.service_tags.get(service.name, self.default_tag)
+                )
+            }
+        )
 
         return _all
 
