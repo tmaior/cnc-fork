@@ -1,15 +1,19 @@
+import yaml
 import os
 from pathlib import Path
 from typing import Union, List, ClassVar, Optional
-
-import yaml
-from pydantic import Field, model_validator, field_validator
+from pydantic import (
+    Field,
+    model_validator,
+    field_validator,
+)
 
 from .base_model import BaseModel
 from .providers.amazon.environment_collection import AWSEnvironmentCollection
 from .providers.google.environment_collection import GCPEnvironmentCollection
-from cnc.logger import get_logger
 from cnc.utils import clean_name_string
+
+from cnc.logger import get_logger
 
 log = get_logger(__name__)
 
@@ -17,15 +21,7 @@ SUPPORTED_SERVICES_FOR_FLAVOR = {
     "run": ["backend", "frontend", "database", "cache", "object_storage"],
     "gke": ["backend", "frontend", "database", "cache", "object_storage"],
     "run-lite": ["backend", "frontend", "database", "cache", "object_storage"],
-    "ecs": [
-        "backend",
-        "frontend",
-        "database",
-        "cache",
-        "dynamodb",
-        "serverless",
-        "object_storage",
-    ],
+    "ecs": ["backend", "frontend", "database", "cache", "dynamodb","serverless", "object_storage"],
     "lambda-lite": ["serverless", "dynamodb", "database"],
 }
 
@@ -47,8 +43,8 @@ class Application(BaseModel):
     region: Optional[str] = None
     flavor: str
     version: Union[int, float]
-    collections: List[Union[AWSEnvironmentCollection, GCPEnvironmentCollection]] = Field(
-        discriminator="provider"
+    collections: List[Union[AWSEnvironmentCollection, GCPEnvironmentCollection]] = (
+        Field(discriminator="provider")
     )
     template_config: Optional[TemplateConfig] = Field(default_factory=TemplateConfig)
 
@@ -110,10 +106,10 @@ class Application(BaseModel):
                 for service in environment.services:
                     if service.settings.type not in allowed_service_types:
                         raise ValueError(
-                            f"Unsupported service type {service.settings.type} "
-                            f"for flavor {self.flavor}"
+                            f"Unsupported service type {service.settings.type} for flavor {self.environment.collection.application.flavor}"
                         )
         return self
+
 
     # ------------------------------
     # Class methods
@@ -199,13 +195,14 @@ class Application(BaseModel):
 
         # copy flavor-specific metadata file
         flavor_metadata = (
-            f"{src_dir}/flavors/{self.provider}/{self.flavor}/{self.version}/.metadata"
+            f"{src_dir}/flavors/{self.provider}"
+            f"/{self.flavor}/{self.version}/.metadata"
         )
         if os.path.isfile(flavor_metadata):
             return flavor_metadata
 
         # copy included shared metadata file
-        included_metadata = f"{src_dir}/flavors/{self.provider}/shared/.metadata"
+        included_metadata = f"{src_dir}/flavors/{self.provider}" f"/shared/.metadata"
         if os.path.isfile(included_metadata):
             return included_metadata
 
