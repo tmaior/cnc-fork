@@ -1,5 +1,5 @@
-import re
 import hashlib
+import re
 from typing import (
     List,
     Optional,
@@ -8,23 +8,16 @@ from typing import (
     Union,
     Annotated,
 )
-from pydantic import (
-    field_validator,
-    Field,
-    model_validator,
-)
 
-from cnc.models.base_model import BaseModel, IgnoredType
-from cnc.models.custom_header import CustomHeaders
-from cnc.models.providers.amazon import (
-    AWSCustomHeaders,
-    AWSDeployResourceLimits,
-)
-from cnc.models.providers.google import GCPDeployResourceLimits
-from .utils import validate_command_list
-from cnc.utils import clean_name_string
+from pydantic import field_validator, Field, model_validator
 
 from cnc.logger import get_logger
+from cnc.models.base_model import BaseModel, IgnoredType
+from cnc.models.custom_header import CustomHeaders
+from cnc.models.providers.amazon import AWSCustomHeaders, AWSDeployResourceLimits
+from cnc.models.providers.google import GCPDeployResourceLimits
+from cnc.utils import clean_name_string
+from .utils import validate_command_list
 
 log = get_logger(__name__)
 
@@ -130,10 +123,6 @@ class BaseServiceSettings(BaseModel):
         return False
 
     @property
-    def is_dynamodb(self):
-        return False
-
-    @property
     def is_cache(self):
         return False
 
@@ -149,7 +138,12 @@ class BaseServiceSettings(BaseModel):
     def unique_id(self):
         _hash = hashlib.sha256()
         _hash.update(
-            f"{self.service.environment.application.name}:{self.service.environment.collection.name}:{self.service.environment.name}:{self.service.name}:{self.url_path}:{self.system.health_check}".encode()
+            f"{self.service.environment.application.name}:"
+            f"{self.service.environment.collection.name}:"
+            f"{self.service.environment.name}:"
+            f"{self.service.name}:"
+            f"{self.url_path}:"
+            f"{self.system.health_check}".encode()
         )
         return _hash.hexdigest()
 
@@ -200,10 +194,6 @@ class ServerlessCDNConfig(BaseModel):
     enabled: Optional[bool] = True
 
 
-class ServerlessCDNConfig(BaseModel):
-    enabled: Optional[bool] = True
-
-
 class FrontendCDNConfig(BaseModel):
     enabled: Optional[bool] = True
 
@@ -225,6 +215,7 @@ class ServerlessServiceSettings(BaseServiceSettings):
     secrets_mode: Optional[Literal["arn", "plaintext"]] = "plaintext"
     cdn: Optional[ServerlessCDNConfig] = Field(default_factory=ServerlessCDNConfig)
     lite: Optional[bool] = False
+
     @property
     def is_web(self):
         return True
@@ -304,7 +295,6 @@ class Worker(BaseModel):
     __str__ = __repr__
 
 
-# TODO: discriminator for provider
 class ScheduledTask(BaseModel):
     provider: str
     name: str = Field(min_length=1)
@@ -348,7 +338,7 @@ class ScheduledTask(BaseModel):
             # on cron expressions
             cron_exp.append("*")
             # AWS EventBridge does not allow both day of month
-            # and day of week to be specified one of them must be a "?"
+            # and day of week to be specified; one of them must be a "?"
             day_of_week = cron_exp[4]
             if day_of_week == "*":
                 cron_exp[4] = "?"
@@ -400,8 +390,7 @@ class BackendServiceSettings(BaseServiceSettings):
     @property
     def target_group_name(self):
         if self.service.settings.system.health_check == "/":
-            # Only append healthcheck hash
-            # if default has been overwritten
+            # Only append health check hash if default has been overwritten
             name = f"{self.service.instance_name[-32:].strip('-')}"
         else:
             _healthcheck_hash = hashlib.md5()
@@ -411,7 +400,7 @@ class BackendServiceSettings(BaseServiceSettings):
                     + self.service.settings.system.health_check
                 ).encode()
             )
-            healthcheck_hash = re.sub("\\W|_", "", _healthcheck_hash.hexdigest())
+            healthcheck_hash = re.sub(r"\W|_", "", _healthcheck_hash.hexdigest())
             name = healthcheck_hash[-32:]
 
-        return re.sub("^-+", "", name)
+        return re.sub(r"^-+", "", name)
