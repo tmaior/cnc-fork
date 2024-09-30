@@ -27,7 +27,7 @@ resource "aws_lb_listener_rule" "{{ service.instance_name }}_listener_rule" {
 
   condition {
     path_pattern {
-      values = ["/{{ service.instance_name }}/*"]
+      values = ["/{{ service.settings.url_path }}/*"]
     }
   }
 }
