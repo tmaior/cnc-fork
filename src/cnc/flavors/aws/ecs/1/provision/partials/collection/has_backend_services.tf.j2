@@ -83,7 +83,7 @@ resource "aws_db_subnet_group" "{{ env_collection.instance_name }}" {
     )
 }
 
-resource "aws_security_group" "{{env_collection.instance_name}}_db_access" {
+resource "aws_security_group" "{{ env_collection.instance_name }}_db_access" {
     vpc_id = {{ env_collection.vpc_resource_address }}.id
     name = "{{ env_collection.instance_name }}-db-access"
     description = "Allow access to RDS"
@@ -107,7 +107,7 @@ resource "aws_security_group" "{{ env_collection.instance_name }}_db" {
               from_port       = 3306
               to_port         = 3306
               protocol        = "tcp"
-              security_groups = [aws_security_group.{{env_collection.instance_name}}_db_access.id]
+              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
             }
           {% endif %}
 
@@ -116,7 +116,7 @@ resource "aws_security_group" "{{ env_collection.instance_name }}_db" {
               from_port       = 1433
               to_port         = 1433
               protocol        = "tcp"
-              security_groups = [aws_security_group.{{env_collection.instance_name}}_db_access.id]
+              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
             }
           {% endif %}
 
@@ -125,7 +125,7 @@ resource "aws_security_group" "{{ env_collection.instance_name }}_db" {
               from_port       = 5432
               to_port         = 5432
               protocol        = "tcp"
-              security_groups = [aws_security_group.{{env_collection.instance_name}}_db_access.id]
+              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
             }
           {% endif %}
 
@@ -391,5 +391,5 @@ resource "aws_iam_role_policy_attachment" "{{ env_collection.instance_name }}_ec
 }
 
 output "security_groups" {
-    value = "[${aws_security_group.{{ env_collection.instance_name }}_default.id}, ${aws_security_group.{{ env_collection.instance_name }}_ecs.id}, ${aws_security_group.{{env_collection.instance_name}}_db_access.id}, ${aws_security_group.{{ env_collection.instance_name }}_cache_access.id}]"
+    value = "[${aws_security_group.{{ env_collection.instance_name }}_default.id}, ${aws_security_group.{{ env_collection.instance_name }}_ecs.id}, ${aws_security_group.{{ env_collection.instance_name }}_db_access.id}, ${aws_security_group.{{ env_collection.instance_name }}_cache_access.id}]"
 }
