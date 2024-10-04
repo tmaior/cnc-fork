@@ -149,8 +149,8 @@ data "aws_iam_policy_document" "db_proxy_service_role" {
 }
 
 resource "time_sleep" "wait_for_proxy_role" {
-  depends_on = [aws_iam_role.{{ env_collection.instance_name }}_db_proxy, aws_iam_role_policy.{{ env_collection.instance_name }}_db_proxy]
-  create_duration = "60s"
+    depends_on = [aws_iam_role.{{ env_collection.instance_name }}_db_proxy, aws_iam_role_policy.{{ env_collection.instance_name }}_db_proxy]
+    create_duration = "60s"
 }
 
 resource "aws_iam_role" "{{ env_collection.instance_name }}_db_proxy" {
@@ -188,15 +188,15 @@ resource "aws_ecs_cluster" "{{ env_collection.instance_name }}" {
 }
 
 resource "aws_ecs_cluster_capacity_providers" "{{ env_collection.instance_name }}" {
-  cluster_name = "${aws_ecs_cluster.{{ env_collection.instance_name }}.name}"
+    cluster_name = "${aws_ecs_cluster.{{ env_collection.instance_name }}.name}"
 
-  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+    capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
-  default_capacity_provider_strategy {
-    base              = 1
-    weight            = 100
-    capacity_provider = "FARGATE"
-  }
+    default_capacity_provider_strategy {
+        base              = 1
+        weight            = 100
+        capacity_provider = "FARGATE"
+    }
 }
 
 data "aws_iam_policy_document" "ecs_service_role" {
