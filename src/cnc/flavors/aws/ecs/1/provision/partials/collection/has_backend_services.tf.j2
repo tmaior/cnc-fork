@@ -94,49 +94,50 @@ resource "aws_security_group" "{{ env_collection.instance_name }}_db" {
     name = "{{ env_collection.instance_name }}-db"
     description = "RDS Security Group"
 
-          # Allow traffic from the SG
-          ingress {
-            from_port = 0
-            to_port   = 0
-            protocol  = "-1"
-            self      = true
-          }
+    # Allow traffic from the SG
+    ingress {
+        from_port = 0
+        to_port   = 0
+        protocol  = "-1"
+        self      = true
+    }
 
-          {% if has_mysql_db %}
-            ingress {
-              from_port       = 3306
-              to_port         = 3306
-              protocol        = "tcp"
-              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
-            }
-          {% endif %}
+    {% if has_mysql_db %}
+    ingress {
+        from_port       = 3306
+        to_port         = 3306
+        protocol        = "tcp"
+        security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
+    }
+    {% endif %}
 
-          {% if has_mssql_db %}
-            ingress {
-              from_port       = 1433
-              to_port         = 1433
-              protocol        = "tcp"
-              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
-            }
-          {% endif %}
+    {% if has_mssql_db %}
+    ingress {
+        from_port       = 1433
+        to_port         = 1433
+        protocol        = "tcp"
+        security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
+    }
+    {% endif %}
 
-          {% if has_postgres_db %}
-            ingress {
-              from_port       = 5432
-              to_port         = 5432
-              protocol        = "tcp"
-              security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
-            }
-          {% endif %}
+    {% if has_postgres_db %}
+    ingress {
+        from_port       = 5432
+        to_port         = 5432
+        protocol        = "tcp"
+        security_groups = [aws_security_group.{{ env_collection.instance_name }}_db_access.id]
+    }
+    {% endif %}
 
-          # Outbound internet access
-          egress {
-            from_port   = 0
-            to_port     = 0
-            protocol    = "-1"
-            cidr_blocks = ["0.0.0.0/0"]
-          }
-        }
+    # Outbound internet access
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+
 data "aws_iam_policy_document" "db_proxy_service_role" {
     statement {
         effect = "Allow"
